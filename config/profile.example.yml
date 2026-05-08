@@ -1,0 +1,87 @@
+# jobsfindCN Profile Configuration
+# 复制此文件为 data/profile.yml 并填写你的信息。
+# 所有模式从此文件读取用户数据。
+
+candidate:
+  full_name: ""
+  email: ""
+  phone: ""
+  location: ""               # 如：北京 / 上海 / 杭州 / 深圳
+  education:
+    school: ""
+    major: ""
+    degree: ""               # 本科 / 硕士 / 博士
+    graduation_year: null
+  work_experience:
+    years: 0
+    current_company: ""
+    current_role: ""
+  linkedin: ""
+  github: ""
+
+target_roles:
+  primary: []                # 如：["Java 后端开发工程师", "算法工程师"]
+  companies:
+    tier1: []                # 一线大厂：字节/腾讯/阿里/美团/拼多多
+    tier2: []                # 二线/独角兽：小红书/快手/B站/得物
+    tier3: []                # 外企/其他：Microsoft/Amazon/Zoom
+
+narrative:
+  headline: ""               # 一句话职业标签
+  exit_story: ""             # 求职动机 / 离职原因
+  superpowers: []            # 3-5 个最突出的能力
+  proof_points:              # 可量化的项目和成果
+    - name: ""
+      description: ""
+
+compensation:
+  target_range: ""           # 目标年包（万），如"40-55万/年"
+  currency: "CNY"
+  minimum: ""                # 底线年包
+  location_flexibility: ""   # 如"仅北京" / "北京/上海均可"
+
+# ============================================================
+# 算法能力画像（系统管理，初始由用户自评）
+# ============================================================
+algorithm_mastery:
+  topics:
+    "数组":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "动态规划":         { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "树/图":           { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "哈希表":           { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "排序/搜索":        { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "贪心":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "回溯":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "链表":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "字符串":           { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "栈/队列":          { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "二分查找":          { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "双指针":           { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "位运算":           { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "数学":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+    "设计":            { level: 1, problems_done: 0, difficulty_reached: "easy", last_practiced: null }
+  overall_level: 1
+  total_problems: 0
+  problems_by_difficulty:
+    easy: 0
+    medium: 0
+    hard: 0
+  last_leetcode_session: null
+
+# ============================================================
+# 八股文能力画像（系统管理，角色驱动，build-profile 时激活）
+# ============================================================
+baguwen_mastery:
+  role: ""                   # 当前激活的角色分类（如 "java-backend"）
+  categories: {}             # 由 build-profile 根据角色自动填充
+  overall_level: 1
+  questions_reviewed: 0
+
+# ============================================================
+# 用户偏好
+# ============================================================
+preferences:
+  programming_language: "Java"    # 刷题主语言
+  practice_frequency: "每周3-5题" # 目标练习频率
+  weak_areas_priority: []         # 薄弱项（系统自动识别）
+  next_review_date: null
