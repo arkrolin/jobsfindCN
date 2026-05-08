@@ -4,7 +4,9 @@
 
 现有的就职助手大多并不匹配中国就业环境，因此该项目完全聚焦于中国特色的求职场景
 
-该 skills 的pdf解析和真题获取依赖于 WebSearch 插件，如果 WebSearch 不可用，则会退回到使用 devtool-chrome-tool 通过浏览器获取数据的方式，请最好保证其中一个可用。
+该 skills 真题获取依赖于 WebSearch 插件，如果 WebSearch 不可用，则会退回到使用 devtool-chrome-tool 通过浏览器获取数据的方式，请最好保证其中一个可用。
+
+该 skills 的pdf解析功能依赖于 Doc2X API, 或者使用 PyMuPDF 库进行解析。
 
 ## 特点
 
