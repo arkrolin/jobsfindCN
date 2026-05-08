@@ -50,6 +50,8 @@ gap 越大 = 越优先
 
 对 P0 和 P1 主题，使用 WebSearch 从 leetcode.cn 获取真实题目：
 
+如果 WebSearch 功能不可用, 则使用 devtool-chrome-tool 通过浏览器获取题目。
+
 搜索策略（每个高频主题搜 2-3 次）：
 ```
 site:leetcode.cn "[主题关键词]" "[难度]"

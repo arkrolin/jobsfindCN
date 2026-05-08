@@ -29,6 +29,7 @@
 **题目获取：**
 优先使用 `data/baguwen-progress.md` 中已通过 WebSearch 收集的真题。
 如果无现成题目，使用 WebSearch 补充搜索。
+如果 WebSearch 功能不可用, 则使用 devtool-chrome-tool 直接使用浏览器获取题目。
 
 ### Step 2: 出题
 

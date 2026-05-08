@@ -29,6 +29,7 @@
 
 **题目获取：**
 使用 WebSearch 从 leetcode.cn 搜索目标主题+难度的题目。
+如果 WebSearch 功能不可用, 则使用 devtool-chrome-tool 通过浏览器获取题目。
 如果用户有指定公司目标，优先搜索该公司的真题。
 
 ### Step 2: 出题
