@@ -7,8 +7,8 @@
 ## 输入形式
 
 用户可能通过以下方式提供简历：
+- 提供 PDF 文件路径（Chrome DevTools 自动提取文本）
 - 粘贴简历文本（纯文本 / Markdown）
-- 提供 PDF 文件路径
 - 口头描述经历（"我是 XX 大学计算机专业..."）
 
 ## 执行流程
@@ -19,13 +19,37 @@
 直接进入 Step 2。
 
 **如果用户提供 PDF 路径：**
-> "我目前无法直接解析 PDF 二进制文件。你可以：
-> 1. 把 PDF 中的文字内容复制粘贴给我
-> 2. 简单描述你的经历，我帮你整理成简历格式
->
-> 哪个方便？"
 
-**如果用户口头描述：**
+PDF 解析通过 Chrome DevTools MCP 实现（Chrome 内置 PDF 渲染器可直接提取文本）：
+
+```
+Step 1a — 打开 PDF
+  browser_navigate 到 "file:///[PDF 绝对路径]"
+  Chrome 会使用内置 PDF 查看器渲染文件
+
+Step 1b — 提取文本
+  使用 evaluate_script 从渲染后的 DOM 中提取文本：
+  () => {
+    // Chrome PDF 查看器将文本渲染为嵌入的 embed 元素
+    // 各页文本节点可直接遍历提取
+    const pages = document.querySelectorAll('.page, .textLayer');
+    if (pages.length > 0) {
+      return Array.from(pages).map(p => p.innerText).join('\n\n');
+    }
+    // Fallback: 尝试获取整个 body 文本
+    return document.body.innerText || '';
+  }
+
+Step 1c — 如果 PDF 无法通过 Chrome 打开
+  回退到手动粘贴模式：
+  "PDF 文件无法自动解析。你可以：
+  1. 把 PDF 中的文字内容复制粘贴给我
+  2. 简单描述你的经历，我帮你整理成简历格式
+  哪个方便？"
+```
+
+**如果用户粘贴文本：**
+直接进入 Step 2。
 认真倾听，追问关键信息，然后整理成结构化 Markdown。
 
 ### Step 2: 结构化提取

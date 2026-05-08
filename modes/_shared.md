@@ -140,7 +140,8 @@
 | Tool | Use |
 |------|-----|
 | WebSearch | 搜索 LeetCode 题目（leetcode.cn）、面经（牛客/小红书/脉脉/知乎）、公司信息 |
-| WebFetch | 获取具体题目页面内容 |
+| Chrome DevTools MCP | 打开 PDF 简历（Chrome 内置渲染器提取文本）、浏览 leetcode.cn/牛客/小红书页面获取题目和面经 |
+| WebFetch | 获取具体题目页面内容（WebSearch 不可用时的备选） |
 | Read | 读取 profile.yml、cv.md、progress 文件、references |
 | Write | 创建/更新进度文件、更新 profile.yml |
 | Edit | 修改 profile.yml 中的 mastery 数据 |
