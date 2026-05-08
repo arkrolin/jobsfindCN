@@ -7,7 +7,7 @@
 ## 输入形式
 
 用户可能通过以下方式提供简历：
-- 提供 PDF 文件路径（Chrome DevTools 自动提取文本）
+- 提供 PDF 文件路径（Claude Code Read 工具直接读取）
 - 粘贴简历文本（纯文本 / Markdown）
 - 口头描述经历（"我是 XX 大学计算机专业..."）
 
@@ -20,37 +20,53 @@
 
 **如果用户提供 PDF 路径：**
 
-PDF 解析通过 Chrome DevTools MCP 实现（Chrome 内置 PDF 渲染器可直接提取文本）：
+PDF 解析使用两层策略——优先在线 API，被拒后用本地库：
 
 ```
-Step 1a — 打开 PDF
-  browser_navigate 到 "file:///[PDF 绝对路径]"
-  Chrome 会使用内置 PDF 查看器渲染文件
+Step 1a — 询问 Doc2X API
+  Doc2X 是专业的 PDF 解析 API，解析效果最好（支持表格/扫描件/复杂排版）。
+  → "要解析这份 PDF，我推荐使用 Doc2X API（解析效果好，支持表格和扫描件）。
+     你有 Doc2X 的 API Key 吗？如果有，我可以通过 API 调用帮你解析。"
+  
+  如果用户同意并提供 API Key：
+  → 使用 Bash 调用 Doc2X API：
+    curl -X POST "https://api.doc2x.com/v1/parse" \
+      -H "Authorization: Bearer $DOC2X_API_KEY" \
+      -F "file=@[PDF路径]" \
+      -F "output_format=md"
+  → 获取返回的 Markdown 文本 → 进入 Step 2 结构化提取
 
-Step 1b — 提取文本
-  使用 evaluate_script 从渲染后的 DOM 中提取文本：
-  () => {
-    // Chrome PDF 查看器将文本渲染为嵌入的 embed 元素
-    // 各页文本节点可直接遍历提取
-    const pages = document.querySelectorAll('.page, .textLayer');
-    if (pages.length > 0) {
-      return Array.from(pages).map(p => p.innerText).join('\n\n');
-    }
-    // Fallback: 尝试获取整个 body 文本
-    return document.body.innerText || '';
-  }
+Step 1b — 用户拒绝 / 无 API Key → 使用 PyMuPDF
+  PyMuPDF 是本地 PDF 解析库，无需 API Key，效果优于 Read 工具。
+  → 先检查 PyMuPDF 是否已安装：
+    python -c "import fitz; print('ok')" 2>&1
+  → 如果未安装（ImportError）：
+    告知用户并安装：pip install PyMuPDF
+  
+  → 使用 Bash 执行 PyMuPDF 提取文本：
+    python -c "
+  import fitz
+  doc = fitz.open('[PDF绝对路径]')
+  for page in doc:
+      print(page.get_text())
+    "
+  → 获取文本 → 进入 Step 2 结构化提取
 
-Step 1c — 如果 PDF 无法通过 Chrome 打开
-  回退到手动粘贴模式：
-  "PDF 文件无法自动解析。你可以：
-  1. 把 PDF 中的文字内容复制粘贴给我
-  2. 简单描述你的经历，我帮你整理成简历格式
-  哪个方便？"
+Step 1c — PyMuPDF 也失败 → 最终回退
+  如果 PyMuPDF 也报错（文件损坏/加密/纯扫描件等）：
+  → "PDF 自动解析失败。你可以：
+    1. 把 PDF 中的文字内容复制粘贴给我
+    2. 简单描述你的经历，我帮你整理成简历格式
+    哪个方便？"
+
+  特殊情况处理：
+  - PyMuPDF 返回空文本但无报错（图片型 PDF）：
+    → "这个 PDF 似乎是扫描图片格式，文字内容无法直接提取。
+       如果你有 Doc2X 的 API Key，它可以处理扫描件。
+       或者你可以直接把关键经历告诉我，我帮你整理。"
+  - 文件需要密码（fitz.open 报 "password" 相关错误）：
+    → "PDF 有密码保护。请提供无密码版本或直接粘贴简历文本。"
 ```
-
-**如果用户粘贴文本：**
-直接进入 Step 2。
-认真倾听，追问关键信息，然后整理成结构化 Markdown。
 
 ### Step 2: 结构化提取
 
